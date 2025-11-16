@@ -13,6 +13,11 @@ public class RewardEndlessLevelRateMod
     // Landfall has made this easy for us. We can simply inherit from Zorro.Settings.IExposedSetting
     // and implement any necessary methods.
     // We also inherit from IntSetting, since this is a setting that stores an int (whole number).
+    //
+    // This [HasteSetting] thing is just a little annotation Haste gives us to register our setting.
+    // The alternative would be to call `GameHandler.Instance.SettingsHandler.AddSetting(new OurSetting());`
+    // on a hook to `GameHandler.Awake`. But this way is much simpler and saves us a hook.
+    [HasteSetting]
     public class EndlessRewardEveryLevelSetting : IntSetting, IExposedSetting
     {
         // These should be self-explanatory.
@@ -25,9 +30,6 @@ public class RewardEndlessLevelRateMod
     // This method will run when the mod loads
     static RewardEndlessLevelRateMod()
     {
-        // Register the setting so it shows up in-game.
-        GameHandler.Instance.SettingsHandler.AddSetting(new EndlessRewardEveryLevelSetting());
-
         /* 
          * Setup an IL hook to modify the IL code of RunHandler.TransitionOnLevelComplete. As the name
          * implies, this function does the transition when a level completes (both when in a shard and
@@ -78,7 +80,8 @@ public class RewardEndlessLevelRateMod
 
             // And thus, we effectively replace that constant "5" with whatever value the player has put in settings!
 
-            /* To learn more about ILHooks and how to use ILCursor, check out some of these resources:
+            /*
+             * To learn more about ILHooks and how to use ILCursor, check out some of these resources:
              * - The official ILCursor docs, listing all methods available: https://monomod.dev/api/MonoMod.Cil.ILCursor.html#methods
              * - Hamunii's guide: https://lethal.wiki/dev/fundamentals/patching-code/monomod-examples#ilhook-examples
              */
